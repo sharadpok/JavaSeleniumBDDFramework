@@ -1,140 +1,180 @@
-**Java Selenium BDD Framework (Cucumber + Maven)**
+🚀 Java Selenium BDD Framework
+(Cucumber + TestNG + Maven + Extent Reports + Parallel Execution)
 
-This repository contains a modular and maintainable Selenium WebDriver automation framework designed using Java, Cucumber BDD, and Maven.
-It follows industry-standard automation practices with clear separation of test logic, test data, configuration, locators, and utilities.
+This repository contains a scalable, corporate-style automation framework built using Java + Selenium WebDriver + Cucumber BDD + TestNG + Extent Reports.
 
-**Technology Stack**
+It supports:
 
-Java 17
-Selenium WebDriver (4.24)
-Cucumber JVM  (7.18)
-TestNG (7.10)
-Maven (4.0.0)
-Git / GitHub 
-IntelliJ IDEA (Community Edition 2024.0)
+✔ Parallel execution
+✔ Thread-safe WebDriver handling
+✔ Extent HTML reporting with screenshots
+✔ Modular folder structure
+✔ Centralized locators & test data
+✔ Screenshot utilities (WebDriver + Desktop fallback)
+✔ Reusable utilities and Hooks setup
 
+🧱 Technology Stack
+Component	Version
+Java	17
+Selenium WebDriver	4.24
+Cucumber JVM	7.18
+TestNG	7.10
+Maven	4.x
+Extent Reports	Latest (Spark + HTML Reporter)
+IntelliJ IDEA	2024.x
+📁 Project Structure
 src
- ├── main
- │    └── java
- │         └── utils
- │              ├── BaseTest.java
- │              └── CommonUtils.java
- │
- └── test
-      ├── java
-      │    ├── runner
-      │    │     └── TestRunner.java
-      │    └── steps
-      │          ├── Hooks.java
-      │          ├── Login.java
-      │          └── Orders.java
-      │
-      └── resources
-           ├── config
-           │     └── global.properties
-           │
-           ├── features
-           │     ├── login.feature
-           │     └── orders.feature
-           │
-           ├── objects
-           │     └── object.properties
-           │
-           └── testdata
-                 ├── login
-                 │     └── testdata.properties
-                 └── orders
-                       └── testdata.properties
+├── main
+│   └── java
+│       └── utils
+│           ├── BaseTest.java
+│           ├── CommonUtils.java
+│           ├── ReportMgr.java
+│           ├── ScreenshotUtils.java
+│           └── TestReportingUtils.java
+│
+└── test
+    ├── java
+    │   ├── cucumberoptions
+    │   │   └── TestRunner.java
+    │   ├── stepdefinitions
+    │   │   ├── Hooks.java
+    │   │   ├── Login.java
+    │   │   └── Orders.java
+    │   └── ...
+    │
+    └── resources
+        ├── config
+        │   └── global.properties
+        ├── features
+        │   ├── login.feature
+        │   └── orders.feature
+        ├── objects
+        │   └── object.properties
+        └── testdata
+            ├── login
+            │   └── testdata.properties
+            └── orders
+                └── testdata.properties
 
+⭐ Framework Highlights
+1️⃣ BaseTest – Thread-Safe WebDriver
 
-**Framework Highlights**
+Uses ThreadLocal WebDriver for parallel runs
 
-**1. BaseTest Setup**
+Handles browser initialization & teardown
 
-WebDriver initialization
+Ensures clean driver lifecycle per scenario
 
-Browser setup and teardown
+2️⃣ Cucumber BDD Structure
 
-Driver lifecycle management
+Feature files under: src/test/resources/features
 
-**2. Cucumber BDD**
+Step definitions under: stepdefinitions
 
-Feature files under resources/features
+Runner: cucumberoptions.TestRunner
 
-Step definitions organized in steps package
+Uses TestNG + Cucumber integration
 
-Centralized runner class
+3️⃣ Object Repository (OR)
 
-**3. Locator Management**
-
-All element locators stored in:
+All UI element locators kept in:
 
 src/test/resources/objects/object.properties
 
 
-Format:
+✔ Supports id=, xpath=, css=, name=, etc.
+✔ Used by CommonUtils.returnByClass(String key)
 
-loginPageHeader=xpath://h1[@class='title']
-username=id:user-name
+4️⃣ Modular Test Data
 
-**4.Test Data Management**
-
-Test data is kept module-wise:
+Feature-specific test data stored in:
 
 testdata/login/testdata.properties
 testdata/orders/testdata.properties
 
 
-Accessed using:
+Usage:
 
-getTestData("login", "username");
+String username = getTestData("login", "username");
 
-**5. Configuration**
+⚙️ Configuration (global.properties)
 
-Global configuration stored in:
+Used for:
 
-resources/config/global.properties
+✔ Screenshot storage path
+✔ Environment data
+✔ Placeholder support (user.dir)
 
+Example:
 
-For environment selection, URLs, credentials, etc.
+screenshotStorePath = C:\\Users\\Sharad\\AutomationReportScreenshots
 
-**6. Common Utilities**
+📸 Screenshot Utilities (NEW – Added in 2nd Commit)
+ScreenshotUtils supports:
 
-Properties loader (with caching)
+WebDriver screenshot
 
-Locator builder (returnByClass)
+Robot Desktop screenshot fallback
 
-Object repository reader
+Automatic folder creation per run
 
-Classpath-based file access
+Thread-safe timestamp folder naming
 
-**How to Run Tests** 
+Used automatically inside: TestReportingUtils.logger()
 
-Using Maven
+📝 Extent Reports Integration (NEW – Added in 2nd Commit)
+Hooks initialize Extent Report once per JVM:
+
+Uses ExtentSparkReporter (HTML)
+
+Report stored under:
+
+Reports/extent-reports/<timestamp>.html
+
+Each scenario gets:
+
+✔ Separate ExtentTest
+✔ Screenshots (WebDriver + Desktop fallback)
+✔ Info, Pass, Fail logging
+
+🔀 Parallel Test Execution (NEW – Added in 2nd Commit)
+Enabled using:
+
+✔ testng.xml
+✔ Maven Surefire plugin
+✔ ThreadLocal WebDriver
+✔ ThreadLocal ExtentTest
+✔ ThreadLocal SoftAssert
+
+🚦 How to Run Tests
+1️⃣ Through Maven (recommended)
+mvn clean test -DsuiteXmlFile=testng.xml
+
+2️⃣ Default execution (runs TestNG + Cucumber automatically)
 mvn clean test
 
-From IntelliJ
 
-Open TestRunner.java
+(provided surefire plugin is configured)
 
-Click Run
+3️⃣ From IntelliJ
 
-Branching Strategy
+Open:
 
-master → Stable build
+cucumberoptions/TestRunner.java
 
-Feature-specific changes should be pushed via separate feature branches
 
-**Future Enhancements (Planned)**
+Click: ▶ Run
 
-Add Extent Reports
+🧪 Sample Reports
 
-Implement Page Object Model (POM)
+✔ Extent HTML report with screenshots
+✔ Auto-created folder structure:
 
-Add logging (Log4j/SLF4J)
+AutomationReportScreenshots/<timestamp>/<thread_id>/
+Reports/extent-reports/<timestamp>.html
 
-Enable parallel execution
-
-Integrate with Jenkins CI/CD
-
-Add Docker support for Selenium Grid
+✔ Branching Strategy
+Branch	Purpose
+master	Stable production-ready framework
+feature/*	New enhancements, changes
